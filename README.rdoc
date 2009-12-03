@@ -1,0 +1,20 @@
+= Rack::Linkify
+
+== Description
+
+Dead links (like this one http://you.cant.click.this.com/) are magically
+transformed into live links! Rack::Linkify is very generous in what it
+considers a link; it will turn http://www.google.com, www.google.com, and
+just plain google.com into a link.
+
+Rack::Linkify can also turn text that looks like @this into a twitter link.
+
+== Usage
+
+URLs only:
+
+  use Rack::Linkify
+
+Enable Twitter links, too:
+
+  use Rack::Linkify, :twitter => true
