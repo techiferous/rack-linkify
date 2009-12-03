@@ -5,7 +5,7 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |s|
     s.name          = "rack-linkify"
-    s.version       = "0.0.0"
+    s.version       = "0.0.1"
     s.add_dependency 'rack-plastic', '>= 0.0.3'
     s.author        = "Wyatt Greene"
     s.email         = "techiferous@gmail.com"
@@ -16,7 +16,7 @@ begin
     }
     s.require_path  = "lib"
     s.files         = []
-    s.files         << "README.rdoc"
+    s.files         << "README"
     s.files         << "LICENSE"
     s.files         << "CHANGELOG"
     s.files         << "Rakefile"
