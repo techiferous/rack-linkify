@@ -147,7 +147,7 @@ class LinkifyTest < Test::Unit::TestCase
     assert_html_equal before_html, after_html
   end
   
-  def test_link_with_http_and_com_domain
+  def test_links_with_http_and_com_domain
     before_html = %Q{
       <html>
         <head><title>Testing Rack::Linkify</title></head>
@@ -189,7 +189,7 @@ class LinkifyTest < Test::Unit::TestCase
   end
 
 
-  def test_link_with_http_and_various_tlds
+  def test_links_with_http_and_various_tlds
     before_html = %Q{
       <html>
         <head><title>Testing Rack::Linkify</title></head>
@@ -239,7 +239,7 @@ class LinkifyTest < Test::Unit::TestCase
   end
 
 
-  def test_link_with_http_and_paths
+  def test_links_with_http_and_paths
     # Note: Linkify does not elegantly handle URLs ending with /.  These URLs are
     # still linkified, but the / ends up outside of the anchor tag.
     before_html = %Q{
@@ -273,6 +273,48 @@ class LinkifyTest < Test::Unit::TestCase
             <ul>
               <li><a href="http://www.google.com">http://www.google.com</a>/</li>
               <li><a href="http://www.google.com/foo">http://www.google.com/foo</a></li>
+            </ul>
+          </div>
+        </body>
+      </html>
+    }
+    after_html = linkify_this_html(before_html)
+    assert_html_equal target_html, after_html
+  end
+
+
+  def test_links_with_https
+    before_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              This test should linkify links like https://www.google.com and
+              https://www.example.com
+            </p>
+            The following should be linkified:
+            <ul>
+              <li>https://www.google.com</li>
+              <li>https://www.example.com</li>
+            </ul>
+          </div>
+        </body>
+      </html>
+    }
+    target_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              This test should linkify links like <a href="https://www.google.com">https://www.google.com</a> and
+              <a href="https://www.example.com">https://www.example.com</a>
+            </p>
+            The following should be linkified:
+            <ul>
+              <li><a href="https://www.google.com">https://www.google.com</a></li>
+              <li><a href="https://www.example.com">https://www.example.com</a></li>
             </ul>
           </div>
         </body>
