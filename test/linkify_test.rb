@@ -240,4 +240,48 @@ class LinkifyTest < Test::Unit::TestCase
   end
 
 
+  def test_link_with_http_and_paths
+    # Note: Linkify does not elegantly handle URLs ending with /.  These URLs are
+    # still linkified, but the / ends up outside of the anchor tag.
+    before_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              This test should linkify links like http://www.google.com/foo/bar and
+              http://www.google.com/ and http://www.google.com/foo and http://www.google.com/foo/
+            </p>
+            The following should be linkified:
+            <ul>
+              <li>http://www.google.com/</li>
+              <li>http://www.google.com/foo</li>
+            </ul>
+          </div>
+        </body>
+      </html>
+    }
+    target_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              This test should linkify links like <a href="http://www.google.com/foo/bar">http://www.google.com/foo/bar</a> and
+              <a href="http://www.google.com">http://www.google.com</a>/ and <a href="http://www.google.com/foo">http://www.google.com/foo</a> and <a href="http://www.google.com/foo">http://www.google.com/foo</a>/
+            </p>
+            The following should be linkified:
+            <ul>
+              <li><a href="http://www.google.com">http://www.google.com</a>/</li>
+              <li><a href="http://www.google.com/foo">http://www.google.com/foo</a></li>
+            </ul>
+          </div>
+        </body>
+      </html>
+    }
+    after_html = linkify_this_html(before_html)
+    assert_html_equal target_html, after_html
+  end
+
+
 end

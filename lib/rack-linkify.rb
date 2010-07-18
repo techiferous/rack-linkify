@@ -50,11 +50,12 @@ module Rack
  
       new_text.gsub!(/\b
                       (\S+\.(#{common_gtlds}|[a-z]{2})\S*) # match words that contain common
-                      # top-level domains or country codes
-                      #
-                      (\.|\?|!|:|,\))* # if the URL ends in punctuation,
-                      # assume the punction is grammatical
-                      # and is not part of the URL
+                                                           # top-level domains or country codes
+                                                           # 
+                      (\.|\?|!|:|,\))*                     # if the URL ends in punctuation,
+                                                           # assume the punction is grammatical
+                                                           # and is not part of the URL
+                                                           # 
                       \b/x,
         # We mark the text with phrases like "beginninganchor1". That's because it's
         # much easier to replace these strings later with anchor tags rather than work within
