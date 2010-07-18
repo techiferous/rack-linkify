@@ -683,4 +683,38 @@ class UrlsTest < Test::Unit::TestCase
   end
 
 
+  def test_form_elements_not_linkified
+    before_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              The contents of form elements should not be linkified.
+              <form action="/users/signup" class="signup_new_user" id="foo" method="post">
+                <input id="user_name" name="user[name]" size="80" tabindex="1" type="text"
+                       value="These should not be linkified: http://www.google.com and example.com.">
+                <select id="subscription_id" name="subscription_id" tabindex="2">
+                  <option value="1" selected>These should not be linkified: http://www.google.com and example.com.</option>
+                  <option value="2">as well as www.example.com/foo</option>
+                  <option value="3">and finally http://www.google.com/foo.</option>
+                </select>
+                <textarea cols="20" id="commitment_note" name="commitment[note]" rows="10" tabindex="18">
+                  The URL http://www.example.com should not be linkified.
+                </textarea>
+                <div class="actions">
+                  <input id="user_submit" name="commit" tabindex="3" type="submit"
+                         value="These should not be linkified: http://www.google.com and example.com.">
+                </div>
+              </form>
+            </p>
+          </div>
+        </body>
+      </html>
+    }
+    after_html = linkify_this_html(before_html)
+    assert_html_equal before_html, after_html
+  end
+
+
 end

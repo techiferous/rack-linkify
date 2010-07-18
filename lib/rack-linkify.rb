@@ -16,7 +16,7 @@ module Rack
     
     def find_candidate_links(doc)
       doc.at_css("body").traverse do |node|
-        if node.text?
+        if node.text? && node.parent.name != 'textarea' && node.parent.name != 'option'
           update_text(node, mark_links(node.content))
         end
       end
