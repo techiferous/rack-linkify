@@ -12,7 +12,7 @@ module Test
 
       def linkify_this_html(html)
         app = lambda { |env| [200, {'Content-Type' => 'text/html'}, html] }
-        app2 = Rack::Linkify.new(app)
+        app2 = Rack::Linkify.new(app, :twitter => true)
         Rack::MockRequest.new(app2).get('/', :lint => true).body
       end
   
