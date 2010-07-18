@@ -409,4 +409,46 @@ class LinkifyTest < Test::Unit::TestCase
   end
 
 
+  def test_links_with_varied_subdomains
+    before_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              This test should linkify links like sub.google.com and
+              foo.bar.baz.example.gov
+            </p>
+            The following should be linkified:
+            <ul>
+              <li>sub.google.com</li>
+              <li>foo.bar.baz.example.gov</li>
+            </ul>
+          </div>
+        </body>
+      </html>
+    }
+    target_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              This test should linkify links like <a href="http://sub.google.com">sub.google.com</a> and
+              <a href="http://foo.bar.baz.example.gov">foo.bar.baz.example.gov</a>
+            </p>
+            The following should be linkified:
+            <ul>
+              <li><a href="http://sub.google.com">sub.google.com</a></li>
+              <li><a href="http://foo.bar.baz.example.gov">foo.bar.baz.example.gov</a></li>
+            </ul>
+          </div>
+        </body>
+      </html>
+    }
+    after_html = linkify_this_html(before_html)
+    assert_html_equal target_html, after_html
+  end
+
+
 end
