@@ -1,2 +1,10 @@
+0.0.2 (July 18, 2010)
+* BUGFIX: No longer messes with existing hrefs.
+* BUGFIX: No longer linkifies URLs in form elements.
+* BUGFIX: Better URL matching in general.
+* Added automated tests.
+
+0.0.1 (December 3, 2009)
+
 0.0.0 (December 3, 2009)
 * Initial release.
