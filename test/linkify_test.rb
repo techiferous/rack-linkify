@@ -605,4 +605,48 @@ class LinkifyTest < Test::Unit::TestCase
   end
 
 
+  def test_more_variety_of_links
+    before_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p id="explanation">
+              The following is a collection of even more links you would come across.
+            </p>
+            <p>
+              The following links should be linkified:
+              http://www.youtube.com/watch?v=_OBlgSz8sSM and
+              http://maps.google.com/maps?f=d&source=s_d&saddr=Milwaukee,+WI&daddr=Albuquerque,+NM&hl=en&geocode=Fba4kAIdVqfC-innR4tX1wIFiDGEe0G1IhlfRA%3BFctYFwId_6Gk-Sl7gwnT3QoihzH99tm4zvjTwA&mra=ls&sll=37.0625,-95.677068&sspn=40.460237,79.013672&ie=UTF8&z=6 and then
+              https://personal.paypal.com/cgi-bin/marketingweb?cmd=_render-content&content_ID=marketing_us/pay_online&nav=0.1 and then
+              and http://rtl.lu/home, http://news.rtl.lu/news/international/74127.html#comments, and http://ipaper.rtl.lu/display/DisplayShopping.188_48.20-48.
+            </p>
+          </div>
+        </body>
+      </html>
+    }
+    target_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p id="explanation">
+              The following is a collection of even more links you would come across.
+            </p>
+            <p>
+              The following links should be linkified:
+              <a href="http://www.youtube.com/watch?v=_OBlgSz8sSM">http://www.youtube.com/watch?v=_OBlgSz8sSM</a> and
+              <a href="http://maps.google.com/maps?f=d&source=s_d&saddr=Milwaukee,+WI&daddr=Albuquerque,+NM&hl=en&geocode=Fba4kAIdVqfC-innR4tX1wIFiDGEe0G1IhlfRA%3BFctYFwId_6Gk-Sl7gwnT3QoihzH99tm4zvjTwA&mra=ls&sll=37.0625,-95.677068&sspn=40.460237,79.013672&ie=UTF8&z=6">http://maps.google.com/maps?f=d&source=s_d&saddr=Milwaukee,+WI&daddr=Albuquerque,+NM&hl=en&geocode=Fba4kAIdVqfC-innR4tX1wIFiDGEe0G1IhlfRA%3BFctYFwId_6Gk-Sl7gwnT3QoihzH99tm4zvjTwA&mra=ls&sll=37.0625,-95.677068&sspn=40.460237,79.013672&ie=UTF8&z=6</a> and then
+              <a href="https://personal.paypal.com/cgi-bin/marketingweb?cmd=_render-content&content_ID=marketing_us/pay_online&nav=0.1">https://personal.paypal.com/cgi-bin/marketingweb?cmd=_render-content&content_ID=marketing_us/pay_online&nav=0.1</a> and then
+              and <a href="http://rtl.lu/home">http://rtl.lu/home</a>, <a href="http://news.rtl.lu/news/international/74127.html#comments">http://news.rtl.lu/news/international/74127.html#comments</a>, and <a href="http://ipaper.rtl.lu/display/DisplayShopping.188_48.20-48">http://ipaper.rtl.lu/display/DisplayShopping.188_48.20-48</a>.
+            </p>
+          </div>
+        </body>
+      </html>
+    }
+    after_html = linkify_this_html(before_html)
+    assert_html_equal target_html, after_html
+  end
+
+
 end
