@@ -649,4 +649,23 @@ class LinkifyTest < Test::Unit::TestCase
   end
 
 
+  def test_false_positives
+    before_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              Nothing in this paragraph should be linkified, including index.html or
+              /foo/bar or /foo/bar.html or net gov com.
+            </p>
+          </div>
+        </body>
+      </html>
+    }
+    after_html = linkify_this_html(before_html)
+    assert_html_equal before_html, after_html
+  end
+
+
 end
