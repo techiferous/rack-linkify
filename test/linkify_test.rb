@@ -2,6 +2,8 @@ require 'test/test_helper'
 require 'rack/mock'
 require 'rack-linkify'
 require 'activesupport'
+require 'dirb'
+require 'colored'
 
 class LinkifyTest < Test::Unit::TestCase
 
@@ -20,13 +22,13 @@ class LinkifyTest < Test::Unit::TestCase
     # the same way and we can do a simple string comparison.
     expected = Nokogiri::HTML(expected).to_html
     actual = Nokogiri::HTML(actual).to_html
-    message = '-'*20
-    message << "\n"
-    message << expected
-    message << "\n----- expected but was -----\n"
-    message << actual
-    message << "\n"
-    message << '-'*20
+    preamble = "\n"
+    preamble =  "*****************************************************\n"
+    preamble << "* The actual HTML does not match the expected HTML. *\n"
+    preamble << "* The differences are highlighted below.            *\n"
+    preamble << "*****************************************************\n"
+    message = preamble.magenta
+    message << Dirb::Diff.new(expected, actual).to_s(:color)
     assert_block(message) { expected == actual }
   end
   
