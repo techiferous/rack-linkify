@@ -26,8 +26,9 @@ module Rack
       html.gsub!('beginninganchor1', '<a href="')
       html.gsub!('beginninganchor2', '">')
       html.gsub!('endinganchor', '</a>')
+      # FIXME: we need the following behavior, but this is the wrong way to do it
       # if an href URL doesn't start with http://, let's add it:
-      html.gsub!(/href="((?!http)\S+)/, 'href="http://\1')
+      # html.gsub!(/href="((?!http)\S+)/, 'href="http://\1')
       html
     end
  

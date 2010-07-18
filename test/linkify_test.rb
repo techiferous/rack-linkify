@@ -1,20 +1,35 @@
 require 'test/test_helper'
 require 'rack/mock'
 require 'rack-linkify'
+require 'activesupport'
 
 class LinkifyTest < Test::Unit::TestCase
 
   def linkify_this_html(html)
-    app = lambda { |env| [200, {'Content-Type' => 'text/plain'}, html] }
-    app = Rack::Linkify.new(app)
-    Rack::MockRequest.new(app).get('/', :lint => true).body
+    app = lambda { |env| [200, {'Content-Type' => 'text/html'}, html] }
+    app2 = Rack::Linkify.new(app)
+    Rack::MockRequest.new(app2).get('/', :lint => true).body
   end
   
-  def test_basic_string
-    after_html = linkify_this_html('I like turtles')
-    assert_equal 'I like turtles', after_html
+  def assert_html_equal(expected, actual)
+    # Rack::Linkify uses Nokogiri under the hood, which does not
+    # preserve the same whitespace between tags when it processes
+    # HTML.  This means we can't do a simple string comparison.
+    # However, if we run both the expected and the actual
+    # through Nokogiri, then the whitespace will be changed in
+    # the same way and we can do a simple string comparison.
+    expected = Nokogiri::HTML(expected).to_html
+    actual = Nokogiri::HTML(actual).to_html
+    message = '-'*20
+    message << "\n"
+    message << expected
+    message << "\n----- expected but was -----\n"
+    message << actual
+    message << "\n"
+    message << '-'*20
+    assert_block(message) { expected == actual }
   end
-
+  
   def test_basic_document
     before_html = %Q{
       <!DOCTYPE html
@@ -30,7 +45,7 @@ class LinkifyTest < Test::Unit::TestCase
       </html>
     }
     after_html = linkify_this_html(before_html)
-    assert_equal before_html, after_html
+    assert_html_equal before_html, after_html
   end
 
   def test_complex_document
@@ -128,7 +143,49 @@ class LinkifyTest < Test::Unit::TestCase
       </html>
     }
     after_html = linkify_this_html(before_html)
-    assert_equal before_html, after_html
+    assert_html_equal before_html, after_html
   end
+  
+  def test_link_with_http_and_com_domain
+    before_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              This test should linkify links like http://www.google.com and
+              http://www.example.com
+            </p>
+            The following should be linkified:
+            <ul>
+              <li>http://www.google.com</li>
+              <li>http://www.example.com</li>
+            </ul>
+          </div>
+        </body>
+      </html>
+    }
+    target_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              This test should linkify links like <a href="http://www.google.com">http://www.google.com</a> and
+              <a href="http://www.example.com">http://www.example.com</a>
+            </p>
+            The following should be linkified:
+            <ul>
+              <li><a href="http://www.google.com">http://www.google.com</a></li>
+              <li><a href="http://www.example.com">http://www.example.com</a></li>
+            </ul>
+          </div>
+        </body>
+      </html>
+    }
+    after_html = linkify_this_html(before_html)
+    assert_html_equal target_html, after_html
+  end
+
 
 end
