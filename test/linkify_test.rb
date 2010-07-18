@@ -668,4 +668,24 @@ class LinkifyTest < Test::Unit::TestCase
   end
 
 
+  def test_comments_not_linkified
+    before_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <!-- Nothing in HTML comments should be linkified, including foo.html or
+                 google.com or http://www.google.com or example.com/foo. -->
+            <p>
+              Alaska has the population of a small city.  Just sayin'.
+            </p>
+          </div>
+        </body>
+      </html>
+    }
+    after_html = linkify_this_html(before_html)
+    assert_html_equal before_html, after_html
+  end
+
+
 end
