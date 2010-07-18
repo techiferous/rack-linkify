@@ -451,4 +451,114 @@ class LinkifyTest < Test::Unit::TestCase
   end
 
 
+  def test_links_followed_by_commas
+    before_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              This test should linkify links like sub.google.com,
+              http://www.google.com, http://example.gov/foo/bar, and
+              https://some.domain.example.com, even though they are
+              followed by punctuation.
+            </p>
+          </div>
+        </body>
+      </html>
+    }
+    target_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              This test should linkify links like <a href="http://sub.google.com">sub.google.com</a>,
+              <a href="http://www.google.com">http://www.google.com</a>, <a href="http://example.gov/foo/bar">http://example.gov/foo/bar</a>, and
+              <a href="https://some.domain.example.com">https://some.domain.example.com</a>, even though they are
+              followed by punctuation.
+            </p>
+          </div>
+        </body>
+      </html>
+    }
+    after_html = linkify_this_html(before_html)
+    assert_html_equal target_html, after_html
+  end
+
+
+  def test_links_followed_by_punctuation
+    # Note: if URLs are followed by a hyphen that is punctuation and not a part of
+    # the URL, Linkify will treat it as part of the URL.  This is not the ideal
+    # behavior, but it is very hard to detect this scenario since hyphens are
+    # a valid part of URLs.
+    before_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              This test should linkify links like sub.google.com?
+              http://www.google.com. http://example.gov/foo/bar! and
+              https://some.domain.example.com: even though they are
+              followed by punctuation.
+            </p>
+          </div>
+        </body>
+      </html>
+    }
+    target_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              This test should linkify links like <a href="http://sub.google.com">sub.google.com</a>?
+              <a href="http://www.google.com">http://www.google.com</a>. <a href="http://example.gov/foo/bar">http://example.gov/foo/bar</a>! and
+              <a href="https://some.domain.example.com">https://some.domain.example.com</a>: even though they are
+              followed by punctuation.
+            </p>
+          </div>
+        </body>
+      </html>
+    }
+    after_html = linkify_this_html(before_html)
+    assert_html_equal target_html, after_html
+  end
+
+
+  def test_links_among_parentheses
+    before_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              This test should linkify links like
+              (http://www.google.com) and (http://example.gov/foo/bar)
+              even though they are surrounded by parentheses.
+            </p>
+          </div>
+        </body>
+      </html>
+    }
+    target_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              This test should linkify links like
+              (<a href="http://www.google.com">http://www.google.com</a>) and (<a href="http://example.gov/foo/bar">http://example.gov/foo/bar</a>)
+              even though they are surrounded by parentheses.
+            </p>
+          </div>
+        </body>
+      </html>
+    }
+    after_html = linkify_this_html(before_html)
+    assert_html_equal target_html, after_html
+  end
+
+
 end

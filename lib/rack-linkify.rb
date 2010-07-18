@@ -50,7 +50,7 @@ module Rack
                       (\S+\.(#{common_gtlds}|[a-z]{2})\S*) # match words that contain common
                                                            # top-level domains or country codes
                                                            # 
-                      (\.|\?|!|:|,\))*                     # if the URL ends in punctuation,
+                      (\.|\?|!|:|,|\))*                    # if the URL ends in punctuation,
                                                            # assume the punction is grammatical
                                                            # and is not part of the URL
                                                            # 
