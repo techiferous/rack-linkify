@@ -19,6 +19,17 @@ class App
         <body>
           <div id="container">
             <h1>Testing Rack::Linkify</h1>
+            <h2>How To Test</h2>
+            <p>
+              This gem comes with the expected automated unit tests that
+              you can run by simply typing 'rake test'.
+            </p>
+            <p>
+              This page serves as an integration test of sorts where you can
+              actually <em>see</em> the results of Rack::Linkify in your
+              browser.
+            </p>
+            <h2>Tests</h2>
             <p>
               This is a test of links in free-flowing text. <br />
               Test a typical URL http://www.google.com <br />
