@@ -688,4 +688,28 @@ class LinkifyTest < Test::Unit::TestCase
   end
 
 
+  def test_existing_hrefs_untouched
+    before_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              Existing hrefs should remain untouched, such as
+              <a href="#">this one</a> and
+              <a href="/foo">this one</a> and
+              <a href="bar.html">this one</a> and
+              <a href="http://google.com">this one</a> and
+              <a href="http://www.example.com/foo/bar/baz">this one</a> and
+              <a href="http://www.example.de/foo/bar/index.html">this one</a>.
+            </p>
+          </div>
+        </body>
+      </html>
+    }
+    after_html = linkify_this_html(before_html)
+    assert_html_equal before_html, after_html
+  end
+
+
 end
