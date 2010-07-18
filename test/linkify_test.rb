@@ -6,6 +6,7 @@ class LinkifyTest < Test::Unit::TestCase
 
   def linkify_this_html(html)
     app = lambda { |env| [200, {'Content-Type' => 'text/plain'}, html] }
+    app = Rack::Linkify.new(app)
     Rack::MockRequest.new(app).get('/', :lint => true).body
   end
   
