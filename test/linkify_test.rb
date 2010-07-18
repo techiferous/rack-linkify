@@ -561,4 +561,48 @@ class LinkifyTest < Test::Unit::TestCase
   end
 
 
+  def test_variety_of_links
+    before_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p id="explanation">
+              The following is a collection of typical links you would come across.
+            </p>
+            <p>
+              The following links should be linkified:
+              http://www.w3schools.com/tags/att_a_href.asp as well as
+              http://www.google.com/#hl=en&source=hp&q=what+is+a+spork&aq=f&aqi=l1g1&aql=&oq=&gs_rfai=Cmg1v-jxDTK_FOoGOzQT2jtnPCgAAAKoEBU_QannZ&fp=6f146f4f6152193c
+              and http://stackoverflow.com/questions/tagged/linux
+              and finally http://www.cnn.com/2010/POLITICS/07/18/tea.party.imbroglio/index.html?hpt=T2.
+            </p>
+          </div>
+        </body>
+      </html>
+    }
+    target_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p id="explanation">
+              The following is a collection of typical links you would come across.
+            </p>
+            <p>
+              The following links should be linkified:
+              <a href="http://www.w3schools.com/tags/att_a_href.asp">http://www.w3schools.com/tags/att_a_href.asp</a> as well as
+              <a href="http://www.google.com/#hl=en&source=hp&q=what+is+a+spork&aq=f&aqi=l1g1&aql=&oq=&gs_rfai=Cmg1v-jxDTK_FOoGOzQT2jtnPCgAAAKoEBU_QannZ&fp=6f146f4f6152193c">http://www.google.com/#hl=en&source=hp&q=what+is+a+spork&aq=f&aqi=l1g1&aql=&oq=&gs_rfai=Cmg1v-jxDTK_FOoGOzQT2jtnPCgAAAKoEBU_QannZ&fp=6f146f4f6152193c</a>
+              and <a href="http://stackoverflow.com/questions/tagged/linux">http://stackoverflow.com/questions/tagged/linux</a>
+              and finally <a href="http://www.cnn.com/2010/POLITICS/07/18/tea.party.imbroglio/index.html?hpt=T2">http://www.cnn.com/2010/POLITICS/07/18/tea.party.imbroglio/index.html?hpt=T2</a>.
+            </p>
+          </div>
+        </body>
+      </html>
+    }
+    after_html = linkify_this_html(before_html)
+    assert_html_equal target_html, after_html
+  end
+
+
 end
