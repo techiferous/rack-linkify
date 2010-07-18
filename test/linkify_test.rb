@@ -190,4 +190,54 @@ class LinkifyTest < Test::Unit::TestCase
   end
 
 
+  def test_link_with_http_and_various_tlds
+    before_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              This test should linkify links like http://www.google.net and
+              http://www.example.org
+            </p>
+            The following should be linkified:
+            <ul>
+              <li>http://www.google.gov</li>
+              <li>http://www.example.de</li>
+              <li>http://www.example.me</li>
+              <li>http://www.example.us</li>
+              <li>http://www.example.edu</li>
+              <li>http://www.example.info</li>
+            </ul>
+          </div>
+        </body>
+      </html>
+    }
+    target_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              This test should linkify links like <a href="http://www.google.net">http://www.google.net</a> and
+              <a href="http://www.example.org">http://www.example.org</a>
+            </p>
+            The following should be linkified:
+            <ul>
+              <li><a href="http://www.google.gov">http://www.google.gov</a></li>
+              <li><a href="http://www.example.de">http://www.example.de</a></li>
+              <li><a href="http://www.example.me">http://www.example.me</a></li>
+              <li><a href="http://www.example.us">http://www.example.us</a></li>
+              <li><a href="http://www.example.edu">http://www.example.edu</a></li>
+              <li><a href="http://www.example.info">http://www.example.info</a></li>
+            </ul>
+          </div>
+        </body>
+      </html>
+    }
+    after_html = linkify_this_html(before_html)
+    assert_html_equal target_html, after_html
+  end
+
+
 end
