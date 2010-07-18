@@ -62,7 +62,7 @@ module Rack
  
       # text that looks like @foo can become a twitter link
       if options[:twitter]
-        new_text.gsub!(/(^|\s)(@(\w+))(\.|\?|!|:|,\))*\b/,
+        new_text.gsub!(/(^|\s|\()(@(\w+))(\.|\?|!|:|,|\))*\b/,
          '\1beginninganchor1http://twitter.com/\3beginninganchor2\2endinganchor')
       end
  
