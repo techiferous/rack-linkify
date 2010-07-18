@@ -1,7 +1,6 @@
 require 'test/test_helper'
 require 'rack/mock'
 require 'rack-linkify'
-require 'activesupport'
 require 'dirb'
 require 'colored'
 
