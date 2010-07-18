@@ -367,4 +367,46 @@ class LinkifyTest < Test::Unit::TestCase
   end
 
 
+  def test_links_without_subdomains
+    before_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              This test should linkify links like google.com and
+              example.gov
+            </p>
+            The following should be linkified:
+            <ul>
+              <li>google.com</li>
+              <li>example.gov</li>
+            </ul>
+          </div>
+        </body>
+      </html>
+    }
+    target_html = %Q{
+      <html>
+        <head><title>Testing Rack::Linkify</title></head>
+        <body>
+          <div id="container">
+            <p>
+              This test should linkify links like <a href="http://google.com">google.com</a> and
+              <a href="http://example.gov">example.gov</a>
+            </p>
+            The following should be linkified:
+            <ul>
+              <li><a href="http://google.com">google.com</a></li>
+              <li><a href="http://example.gov">example.gov</a></li>
+            </ul>
+          </div>
+        </body>
+      </html>
+    }
+    after_html = linkify_this_html(before_html)
+    assert_html_equal target_html, after_html
+  end
+
+
 end
